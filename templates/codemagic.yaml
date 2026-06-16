@@ -1,0 +1,101 @@
+# Codemagic 配置模板 — Capacitor 项目
+
+workflows:
+  ios-workflow:
+    name: iOS Build
+    instance_type: mac_mini_m1
+    max_build_duration: 30
+    
+    environment:
+      vars:
+        # App Store Connect API Key — 在 Codemagic 环境变量中设置
+        # APP_STORE_CONNECT_PRIVATE_KEY: Encrypted(...)
+        # APP_STORE_CONNECT_KEY_IDENTIFIER: Encrypted(...)
+        # APP_STORE_CONNECT_ISSUER_ID: Encrypted(...)
+      node: 20
+      xcode: latest
+      cocoapods: default
+    
+    cache:
+      npm: true
+    
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      
+      - name: Capacitor sync
+        script: |
+          npx cap sync ios
+      
+      - name: Pod install
+        script: |
+          cd ios/App
+          pod install
+      
+      - name: Patch Pods code signing
+        script: |
+          cd ios/App/Pods
+          # Disable code signing for all Pods targets
+          for target in $(xcodebuild -list -project Pods.xcodeproj | sed -n '/Targets:/,/Build Configurations:/p' | tail -n +2 | head -n -1 | sed 's/^[[:space:]]*//'); do
+            xcodebuild -project Pods.xcodeproj -target "$target" \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO
+          done
+      
+      - name: Build IPA
+        script: |
+          xcode-project build-ipa \
+            --project ios/App/App.xcodeproj \
+            --scheme App \
+            --archive-type development \
+            --export-options ExportOptions.plist
+    
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  android-workflow:
+    name: Android Build
+    instance_type: mac_mini_m1
+    max_build_duration: 20
+    
+    environment:
+      vars:
+        # Keystore — 在 Codemagic 环境变量中设置
+        # CM_KEYSTORE_PATH: Encrypted(...)
+        # CM_KEYSTORE_PASSWORD: Encrypted(...)
+        # CM_KEY_ALIAS: Encrypted(...)
+        # CM_KEY_PASSWORD: Encrypted(...)
+      node: 20
+    
+    cache:
+      npm: true
+      gradle: true
+    
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      
+      - name: Capacitor sync
+        script: |
+          npx cap sync android
+      
+      - name: Build AAB
+        script: |
+          cd android
+          ./gradlew bundleRelease
+    
+    artifacts:
+      - android/app/build/outputs/bundle/release/*.aab
+    
+    publishing:
+      google_play:
+        credentials: Encrypted(...)
+        track: internal
