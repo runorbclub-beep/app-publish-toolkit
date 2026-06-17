@@ -23,25 +23,25 @@ Not a tutorial. Not consulting. We do it for you.
 | Service | Price | Description |
 |---|---|---|
 | 🍎 Apple App Store | ¥999 | iOS single platform, includes signing, materials, submission guidance |
-| 🤖 Google Play | ¥1,599 | Android single platform, includes 12 testers Closed Testing (PrimeTestLab) |
+| 🤖 Google Play | ¥1,599 | Android single platform, includes 12 testers Closed Testing |
 | 📱📱 Dual Platform | ¥2,299 | Apple + Google Play, parallel processing |
 
-**Why is Android more expensive?** Google Play requires 12 testers for 14-day Closed Testing. We use PrimeTestLab to arrange testers — this is a hard cost.
+**Why is Android more expensive?** Google Play requires 12 testers for 14-day Closed Testing. We arrange testers — this is a hard cost. We will build our own tester pool later to bring the price down.
 
 ## 🚀 How it works
 
 ```
-Your App → We prepare materials → You submit on your device → Live!
+Your App → We prepare materials → We submit on your behalf → Live!
 ```
 
 1. **Order** — Tell us your app name, tech stack, target platform
 2. **Preparation** — We prepare all publishing materials (descriptions, screenshots, privacy policy, signing, tester plan)
-3. **Submission** — You operate on your own device, we guide you step by step. Passwords stay with you. Usually under 30 minutes.
+3. **Submission** — You provide account credentials, we handle the entire submission for you. Usually within 30 minutes.
 
 ## 🔑 Security Guarantee
 
-- All account login, password entry, certificate upload, and final submission are done by **you personally**
-- We handle material preparation and technical guidance — **we never touch your credentials**
+- You provide account credentials, we handle everything. You don't need to do anything.
+- We guarantee confidentiality. No credentials are retained after service completion.
 - If review fails after following our plan — **full refund**
 
 ## 📖 Open Source Documentation
